@@ -27,7 +27,7 @@
                 </h1>
 
                 <!-- First Blog Post -->
-                <?php display_post();  ?>
+              <?php search_engine(); ?>
 
                 <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
@@ -48,13 +48,15 @@
             </div>
 
             <!-- Blog Sidebar Widgets Column -->
+
             <div class="col-md-4">
 
                 <!-- Blog Search Well -->
 
                 <div class="well">
+
                     <h4>Blog Search</h4>
-                    <form class="" action="search.php" method="get">
+                    <form class="" action="" method="get">
                       <div class="input-group">
                           <input name="search" type="text" class="form-control">
                           <span class="input-group-btn">

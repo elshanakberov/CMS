@@ -30,7 +30,7 @@ function display_cat_table() {
 
 }
 
-/* POST TABLE AND DISPLAY RESULT */
+/******************** POST TABLE AND DISPLAY RESULT ***************/
 
 function display_post(){
   global $con;
@@ -45,19 +45,73 @@ function display_post(){
       $post_date = $row['post_date'];
       $post_image = $row['post_image'];
       $post_content = $row['post_content'];
-  }
+
 
 ?>
-<h2>
-    <a href="#"><?php echo $post_title ?></a>
-</h2>
-<p class="lead">
-    by <a href="index.php"><?php echo $post_author ?></a>
-</p>
-<p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?></p>
-<hr>
-<img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
-<hr>
-<p><?php echo $post_content ?></p>
+        <h2>
+            <a href="#"><?php echo $post_title ?></a>
+        </h2>
+        <p class="lead">
+            by <a href="index.php"><?php echo $post_author ?></a>
+        </p>
+        <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?></p>
+        <hr>
+        <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
+        <hr>
+        <p><?php echo $post_content ?></p>
 
-<?php } ?>
+<?php } }?>
+<?php
+
+
+/********************** SEARCH ENGINE ********************/
+
+ function search_engine(){
+      global $con;
+
+
+      if(isset($_GET['submit'])){
+
+          $search =  $_GET['search'];
+          $query = "SELECT * FROM post WHERE post_tags LIKE '%$search%' ";
+          $search_query = mysqli_query($con,$query);
+
+          $result =  mysqli_num_rows($search_query);
+              if($result > 0) {
+
+                  while($row = mysqli_fetch_assoc($search_query)){
+
+                        $post_title = $row['post_title'];
+                        $post_author = $row['post_author'];
+                        $post_date = $row['post_date'];
+                        $post_image = $row['post_image'];
+                        $post_content = $row['post_content'];
+
+?>
+                        <h2>
+                            <a href="#"><?php echo $post_title ?></a>
+                        </h2>
+                        <p class="lead">
+                            by <a href="index.php"><?php echo $post_author ?></a>
+                        </p>
+                        <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?></p>
+                        <hr>
+                        <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
+                        <hr>
+                        <p><?php echo $post_content ?></p>
+<?php
+                        }
+
+                      }else {
+
+                            echo "<h1>No Results</h1>";
+
+                      }
+
+                  }
+
+          }
+
+
+
+?>
