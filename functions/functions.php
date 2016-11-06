@@ -87,19 +87,20 @@ function display_post(){
                         $post_image = $row['post_image'];
                         $post_content = $row['post_content'];
 
-?>
+                        echo "
                         <h2>
-                            <a href="#"><?php echo $post_title ?></a>
+                            <a href='#'>{$post_title}</a>
                         </h2>
-                        <p class="lead">
-                            by <a href="index.php"><?php echo $post_author ?></a>
+                        <p class='lead'>
+                            by <a href='index.php'>{$post_author}</a>
                         </p>
-                        <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?></p>
+                        <p><span class='glyphicon glyphicon-time'></span> Posted on {$post_date}</p>
                         <hr>
-                        <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
+                        <img class='img-responsive' src='images/{$post_image} ' alt=''>
                         <hr>
-                        <p><?php echo $post_content ?></p>
-<?php
+                        <p>{$post_content}</p>
+                        ";
+
                         }
 
                       }else {
@@ -113,5 +114,20 @@ function display_post(){
           }
 
 
+/********************** SIDERBAR CATEGORIES ********************/
+
+function blog_categories_well(){
+  global $con;
+
+  $query = "SELECT * FROM category";
+  $result = mysqli_query($con,$query);
+
+        while($row = mysqli_fetch_assoc($result)){
+              $category_title = $row['category_title'];
+
+                echo "<ul class='list-unstyled'><li><a href='#'>{$category_title}</a></li></ul>";
+
+             }
+      }
 
 ?>
