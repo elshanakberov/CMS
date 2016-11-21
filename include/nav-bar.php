@@ -15,9 +15,14 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
             <ul class="nav navbar-nav">
+
               <?php display_cat_table(); ?>
+
                 <li>
                   <a href="admin">Admin</a>
+                </li>
+                <li>
+                  <a href="login/login.php">Login</a>
                 </li>
             </ul>
         </div>
