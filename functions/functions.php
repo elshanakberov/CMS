@@ -232,4 +232,82 @@ function blog_categories_well(){
     }
 
 
+
+/********************** ADMIN POSTS ********************/
+
+
+  function show_posts(){
+    global $con;
+
+    $query = "SELECT * FROM post ";
+    $show_posts_query = mysqli_query($con,$query);
+    confirm($show_posts_query);
+
+    while($row = mysqli_fetch_array($show_posts_query)){
+
+          $post_id = $row['post_id'];
+          $post_category_id = $row['post_category_id'];
+          $post_title = $row['post_title'];
+          $post_author = $row['post_author'];
+          $post_image = $row['post_image'];
+          $post_status = $row['post_status'];
+          $post_tags = $row['post_tags'];
+          $post_comments = $row['post_comment_count'];
+          $post_date = $row['post_date'];
+
+        echo "<tr>";
+            echo "<td>{$post_id}</td>";
+            echo "<td>{$post_category_id}</td>";
+            echo "<td>{$post_author}</td>";
+            echo "<td>{$post_title}</td>";
+            echo "<td>{$post_status}</td>";
+            echo "<td><img class='img-responsive' width='120px' src='../images/{$post_image}' ></td>";
+            echo "<td>{$post_tags}</td>";
+            echo "<td>{$post_comments}</td>";
+            echo "<td>{$post_date}</td>";
+        echo "</tr>";
+    }
+  }
+
+
+  function add_post(){
+    global $con;
+
+      if(isset($_POST['submit'])){
+
+              $post_title = clean($_POST['post_title']);
+              $post_category_id = clean($_POST['post_category_id']);
+              $post_author = clean($_POST['post_author']);
+              $post_status = clean($_POST['post_status']);
+              $image_name = $_FILES['post_image']['name'];
+              $image_tmp_name = $_FILES['post_image']['tmp_name'];
+              $post_tags = $_POST['post_tags'];
+              $post_content= $_POST['post_content'];
+              $post_date = date('d-m-y');
+              $post_comment_count = 4;
+              $extension = substr($image_name,strpos($image_name, '.') + 1);
+
+              if(isset($image_name)){
+                if($extension == "jpg" || $extension == "png" || $extension == "jpeg"){
+                        move_uploaded_file($image_tmp_name,"../images/$image_name");
+                }else{
+                  echo "Error ay cindir";
+                }
+              }
+
+              if($post_title == "" || empty($post_title)){
+                  echo "<h3>I was wrong</h3>";
+              }elseif($post_author == "" || empty($post_author)){
+                  echo "<h3>I was wrong</h3>";
+              }else{
+                $query = "INSERT INTO post(post_category_id,post_title,post_author,post_date,post_image,post_content,post_tags,post_comment_count,post_status) ";
+                $query .= "VALUES('{$post_category_id}','{$post_title}','{$post_author}',now(),'{$image_name}','{$post_content}','{$post_tags}','{$post_comment_count}','{$post_status}' )";
+                $insert_query = mysqli_query($con,$query);
+              }
+
+
+
+      }
+
+}
 ?>

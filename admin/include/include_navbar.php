@@ -125,10 +125,10 @@
                 <a href="javascript:;" data-toggle="collapse" data-target="#posts"><i class="fa fa-fw fa-arrows-v"></i> Posts <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="posts" class="collapse">
                     <li>
-                        <a href="#">Posts</a>
+                        <a href="posts.php?source=view_all_posts">View All Posts</a>
                     </li>
                     <li>
-                        <a href="#">Add Post</a>
+                        <a href="posts.php?source=add_post">Add Post</a>
                     </li>
                 </ul>
             </li>
