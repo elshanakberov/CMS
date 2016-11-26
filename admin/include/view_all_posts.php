@@ -16,5 +16,6 @@
       </thead>
       <tbody>
           <?php show_posts(); ?>
+          <?php delete_post(); ?>
       </tbody>
 </table>

@@ -265,6 +265,8 @@ function blog_categories_well(){
             echo "<td>{$post_tags}</td>";
             echo "<td>{$post_comments}</td>";
             echo "<td>{$post_date}</td>";
+            echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
+            echo "<td><a href='posts.php?delete={$post_id}'>Delete</a></td>";
         echo "</tr>";
     }
   }
@@ -291,7 +293,7 @@ function blog_categories_well(){
                 if($extension == "jpg" || $extension == "png" || $extension == "jpeg"){
                         move_uploaded_file($image_tmp_name,"../images/$image_name");
                 }else{
-                  echo "Error ay cindir";
+                  echo "Only jpg,jpeg,png extensions allowed";
                 }
               }
 
@@ -304,10 +306,85 @@ function blog_categories_well(){
                 $query .= "VALUES('{$post_category_id}','{$post_title}','{$post_author}',now(),'{$image_name}','{$post_content}','{$post_tags}','{$post_comment_count}','{$post_status}' )";
                 $insert_query = mysqli_query($con,$query);
               }
+      }
+}
 
+  function delete_post(){
+      global $con;
 
+      if(isset($_GET['delete'])){
+
+          $delete_id = $_GET['delete'];
+          $query = "DELETE FROM post WHERE post_id = {$delete_id}";
+          $delete_query = mysqli_query($con,$query);
+          confirm($delete_query);
+          redirect("posts.php");
 
       }
+  }
 
-}
+  function select_and_update_post(){
+    global $con;
+    global $post_title1,$post_category_id1,$post_author1,
+    $post_status1,$post_image1,$post_tags1,$post_content1;
+
+// Fetching previous data in the database
+
+      if(isset($_GET['p_id'])){
+          $edit_post_id = $_GET['p_id'];
+       }
+
+          $query = "SELECT * FROM post ";
+          $select_query = mysqli_query($con,$query);
+
+            while($row = mysqli_fetch_array($select_query)){
+
+                  $post_id1 = $row['post_id'];
+                  $post_title1 = $row['post_title'];
+                  $post_category_id1 = $row['post_category_id'];
+                  $post_author1 = $row['post_author'];
+                  $post_status1 = $row['post_status'];
+                  $post_image1 = $row['post_image'];
+                  $post_tags1 = $row['post_tags'];
+                  $post_content1 = $row['post_content'];
+      }
+// Updating those data
+
+      if(isset($_POST['update'])){
+
+        $post_title1 = clean($_POST['post_title']);
+        $post_category_id1 = clean($_POST['post_category_id']);
+        $post_author1 = clean()$_POST['post_author'];
+        $post_status1 = clean($_POST['post_status']);
+        $post_image1 = $_FILES ['post_image'] ['name'] ;
+        $post_image_temp = $_FILES ['post_image'] ['tmp_name'];
+        $post_tags1 = clean($_POST['post_tags']);
+        $post_content1 = clean($_POST['post_content']);
+
+        $location = "../images/ ";
+
+        $extension = substr($post_image1,strpos($post_image1, ".") + 1);
+            if(isset($post_image1)){
+                if($extension == "jpg" || $extension == "jpeg" || $extension == "png"){
+                    move_uploaded_file($post_image_temp,$location.$post_image1);
+                }else{
+                    echo "Only jpg,jpeg,png file extensions are allowed";
+                }
+            }elseif($post_title1 == "" || empty($post_title1) || $post_author1 == "" || empty($post_author1)){
+                  echo "<h2>Post could not be updated to empty field</h2>";
+            }else{
+                $query  = "UPDATE post SET ";
+                $query .= "post_title = '{$post_title1}', ";
+                $query .= "post_category_id = {$post_category_id1}, ";
+                $query .= "post_date = now(), ";
+                $query .= "post_status = '{$post_status1}', ";
+                $query .= "post_content = '{$post_content1}', ";
+                $query .= "post_image = '{$post_image1}' ";
+                $query .= "WHERE post_id = {$edit_post_id} ";
+
+                $update_query = mysqli_query($con,$query);
+                confirm($update_query);
+          }
+      }
+  }
 ?>
