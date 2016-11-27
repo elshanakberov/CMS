@@ -153,6 +153,22 @@ function blog_categories_well(){
               </tr>";
         }
   }
+    function admin_category2(){
+      global $con;
+
+        $query="SELECT * FROM category";
+        $sql_query = mysqli_query($con,$query);
+
+          while($row = mysqli_fetch_array($sql_query)){
+
+                $category_title = $row['category_title'];
+                $category_id = $row['category_id'];
+
+                    echo "
+                              <option>$category_title</option>
+                    ";
+          }
+    }
 
   function insert_category(){
     global $con;
@@ -245,28 +261,32 @@ function blog_categories_well(){
 
     while($row = mysqli_fetch_array($show_posts_query)){
 
-          $post_id = $row['post_id'];
-          $post_category_id = $row['post_category_id'];
-          $post_title = $row['post_title'];
-          $post_author = $row['post_author'];
-          $post_image = $row['post_image'];
-          $post_status = $row['post_status'];
-          $post_tags = $row['post_tags'];
-          $post_comments = $row['post_comment_count'];
-          $post_date = $row['post_date'];
+          $post_id1 = $row['post_id'];
+          $post_category_id1 = $row['post_category_id'];
+          $post_title1 = $row['post_title'];
+          $post_author1 = $row['post_author'];
+          $post_image1 = $row['post_image'];
+          $post_status1 = $row['post_status'];
+          $post_tags1 = $row['post_tags'];
+          $post_comments1 = $row['post_comment_count'];
+          $post_date1 = $row['post_date'];
 
-        echo "<tr>";
-            echo "<td>{$post_id}</td>";
-            echo "<td>{$post_category_id}</td>";
-            echo "<td>{$post_author}</td>";
-            echo "<td>{$post_title}</td>";
-            echo "<td>{$post_status}</td>";
-            echo "<td><img class='img-responsive' width='120px' src='../images/{$post_image}' ></td>";
-            echo "<td>{$post_tags}</td>";
-            echo "<td>{$post_comments}</td>";
-            echo "<td>{$post_date}</td>";
-            echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
-            echo "<td><a href='posts.php?delete={$post_id}'>Delete</a></td>";
+            echo "<tr>";
+            echo "<td>{$post_id1}</td>";
+            echo "<td>{$post_author1}</td>";
+            echo "<td>{$post_title1}</td>";
+            echo "<td>0000{$post_category_id1}</td>";
+
+
+
+
+            echo "<td>{$post_status1}</td>";
+            echo "<td><img class='img-responsive' width='120px' src='../images/{$post_image1}' ></td>";
+            echo "<td>{$post_tags1}</td>";
+            echo "<td>{$post_comments1}</td>";
+            echo "<td>{$post_date1}</td>";
+            echo "<td><a href='posts.php?source=edit_post&p_id={$post_id1}'>Edit</a></td>";
+            echo "<td><a href='posts.php?delete={$post_id1}'>Delete</a></td>";
         echo "</tr>";
     }
   }
@@ -277,33 +297,33 @@ function blog_categories_well(){
 
       if(isset($_POST['submit'])){
 
-              $post_title = clean($_POST['post_title']);
-              $post_category_id = clean($_POST['post_category_id']);
-              $post_author = clean($_POST['post_author']);
-              $post_status = clean($_POST['post_status']);
-              $image_name = $_FILES['post_image']['name'];
-              $image_tmp_name = $_FILES['post_image']['tmp_name'];
-              $post_tags = $_POST['post_tags'];
-              $post_content= $_POST['post_content'];
-              $post_date = date('d-m-y');
+              $post_title1 = clean($_POST['post_title']);
+              $post_category_id1 = clean($_POST['post_category_id']);
+              $post_author1 = clean($_POST['post_author']);
+              $post_status1 = clean($_POST['post_status']);
+              $image_name1 = $_FILES['post_image']['name'];
+              $image_tmp_name1 = $_FILES['post_image']['tmp_name'];
+              $post_tags1 = $_POST['post_tags'];
+              $post_content1= $_POST['post_content'];
+              $post_date1 = date('d-m-y');
               $post_comment_count = 4;
-              $extension = substr($image_name,strpos($image_name, '.') + 1);
+              $extension = substr($image_name1,strpos($image_name1, '.') + 1);
 
-              if(isset($image_name)){
+              if(isset($image_name1)){
                 if($extension == "jpg" || $extension == "png" || $extension == "jpeg"){
-                        move_uploaded_file($image_tmp_name,"../images/$image_name");
+                        move_uploaded_file($image_tmp_name1,"../images/$image_name1");
                 }else{
                   echo "Only jpg,jpeg,png extensions allowed";
                 }
               }
 
-              if($post_title == "" || empty($post_title)){
+              if($post_title1 == "" || empty($post_title1)){
                   echo "<h3>I was wrong</h3>";
-              }elseif($post_author == "" || empty($post_author)){
+              }elseif($post_author1 == "" || empty($post_author1)){
                   echo "<h3>I was wrong</h3>";
               }else{
                 $query = "INSERT INTO post(post_category_id,post_title,post_author,post_date,post_image,post_content,post_tags,post_comment_count,post_status) ";
-                $query .= "VALUES('{$post_category_id}','{$post_title}','{$post_author}',now(),'{$image_name}','{$post_content}','{$post_tags}','{$post_comment_count}','{$post_status}' )";
+                $query .= "VALUES('{$post_category_id1}','{$post_title1}','{$post_author1}',now(),'{$image_name1}','{$post_content1}','{$post_tags1}','{$post_comment_count}','{$post_status1}' )";
                 $insert_query = mysqli_query($con,$query);
               }
       }
@@ -334,7 +354,7 @@ function blog_categories_well(){
           $edit_post_id = $_GET['p_id'];
        }
 
-          $query = "SELECT * FROM post ";
+          $query = "SELECT * FROM post WHERE post_id = {$edit_post_id} ";
           $select_query = mysqli_query($con,$query);
 
             while($row = mysqli_fetch_array($select_query)){
@@ -347,30 +367,38 @@ function blog_categories_well(){
                   $post_image1 = $row['post_image'];
                   $post_tags1 = $row['post_tags'];
                   $post_content1 = $row['post_content'];
-      }
+          }
 // Updating those data
 
       if(isset($_POST['update'])){
 
-        $post_title1 = clean($_POST['post_title']);
-        $post_category_id1 = clean($_POST['post_category_id']);
-        $post_author1 = clean()$_POST['post_author'];
-        $post_status1 = clean($_POST['post_status']);
-        $post_image1 = $_FILES ['post_image'] ['name'] ;
-        $post_image_temp = $_FILES ['post_image'] ['tmp_name'];
-        $post_tags1 = clean($_POST['post_tags']);
-        $post_content1 = clean($_POST['post_content']);
+          $post_title1 = $_POST['post_title'];
+          $post_category_id1 = $_POST['post_category_id'];
+          $post_author1 = $_POST['post_author'];
+          $post_status1 = $_POST['post_status'];
+          $post_image1 = $_FILES ['post_image'] ['name'];
+          $post_image_temp1 = $_FILES ['post_image'] ['tmp_name'];
+          $post_tags1 = $_POST['post_tags'];
+          $post_content1 = $_POST['post_content'];
 
-        $location = "../images/ ";
+          $location = "../images/ ";
+          $extension = substr($post_image1,strpos($post_image1, ".") + 1);
 
-        $extension = substr($post_image1,strpos($post_image1, ".") + 1);
             if(isset($post_image1)){
-                if($extension == "jpg" || $extension == "jpeg" || $extension == "png"){
-                    move_uploaded_file($post_image_temp,$location.$post_image1);
-                }else{
-                    echo "Only jpg,jpeg,png file extensions are allowed";
-                }
-            }elseif($post_title1 == "" || empty($post_title1) || $post_author1 == "" || empty($post_author1)){
+                  if($extension == "jpg" || $extension == "jpeg" || $extension == "png"){
+                      move_uploaded_file($post_image_temp1,$location.$post_image1);
+                  }else{
+                      echo "Only jpg,jpeg,png file extensions are allowed";
+                  }
+            }
+            if(empty($_FILES ['post_image'] ['name'])){
+                $query = "SELECT post_image FROM post WHERE post_id = {$edit_post_id} ";
+                $image_query = mysqli_query($con,$query);
+                  while($row = mysqli_fetch_array($image_query)){
+                          $post_image1 = $row['post_image'];
+                  }
+            }
+            if($post_title1 == "" || empty($post_title1) || $post_author1 == "" || empty($post_author1)){
                   echo "<h2>Post could not be updated to empty field</h2>";
             }else{
                 $query  = "UPDATE post SET ";
@@ -385,6 +413,8 @@ function blog_categories_well(){
                 $update_query = mysqli_query($con,$query);
                 confirm($update_query);
           }
+      }else{
+        echo "";
       }
   }
 ?>

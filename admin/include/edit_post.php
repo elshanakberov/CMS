@@ -1,21 +1,19 @@
-
+<?php select_and_update_post(); ?>
 <form action="" method="post" enctype="multipart/form-data">
-<?php
-
-select_and_update_post();
-
-
-?>
-
               <div class="form-group">
                   <label for="title">Post Title</label>
                   <input value="<?php echo $post_title1; ?>" type="text" class="form-control" name="post_title">
               </div>
-
               <div class="form-group">
-                  <label for="title">Post Category id</label>
-                  <input value="<?php echo $post_category_id1; ?>" type="text" class="form-control" name="post_category_id">
+                    <select class="" name="post_category_id">
+                            <?php admin_category2();
+
+                            ?>
+
+                    </select>
               </div>
+
+
 
               <div class="form-group">
                   <label for="title">Post Author</label>
@@ -28,8 +26,9 @@ select_and_update_post();
               </div>
 
               <div class="form-group">
-                  <label for="title">Post Image</label>
-                  <input value="<?php echo $post_image1; ?>" type="file"  name="post_image">
+                  <label for="post_image">Post Image</label>
+                  <input  type="file"  name="post_image">
+                  <img  width="100" src="../images/<?php echo $post_image1; ?>" alt="" />
               </div>
 
 
@@ -45,7 +44,6 @@ select_and_update_post();
 
 
               <div class="form-group">
-
                   <input type="submit" class="btn-btn-primary" name="update" value="Submit">
               </div>
 

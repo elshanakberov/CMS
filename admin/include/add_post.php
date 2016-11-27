@@ -6,10 +6,13 @@
                             <input  type="text" class="form-control" name="post_title">
                         </div>
 
-                        <div class="form-group">
-                            <label for="title">Post Category id</label>
-                            <input type="text" class="form-control" name="post_category_id">
-                        </div>
+
+                          <div class="form-group">
+                                <select class="" name="post_category_id">
+                                        <?php admin_category2(); ?>
+                                </select>
+                          </div>
+
 
                         <div class="form-group">
                             <label for="title">Post Author</label>
