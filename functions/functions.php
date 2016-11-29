@@ -41,6 +41,7 @@ function display_post(){
 
   while($row = mysqli_fetch_assoc($result)){
       $post_title = $row['post_title'];
+      $post_id = $row['post_id'];
       $post_author = $row['post_author'];
       $post_date = $row['post_date'];
       $post_image = $row['post_image'];
@@ -49,7 +50,7 @@ function display_post(){
 
 ?>
         <h2>
-            <a href="#"><?php echo $post_title ?></a>
+            <a href="post.php?post_id=<?php echo $post_id; ?> "><?php echo $post_title ?></a>
         </h2>
         <p class="lead">
             by <a href="index.php"><?php echo $post_author ?></a>
@@ -124,10 +125,53 @@ function blog_categories_well(){
 
         while($row = mysqli_fetch_assoc($result)){
               $category_title = $row['category_title'];
+              $category_id = $row['category_id'];
 
-                echo "<ul class='list-unstyled'><li><a href='#'>{$category_title}</a></li></ul>";
+                echo "<ul class='list-unstyled'><li><a href='category.php?category={$category_id}'>{$category_title}</a></li></ul>";
 
              }
+      }
+
+      function display_category_post(){
+        global $con;
+        if(isset($_GET['category'])){
+            $cat_id = $_GET['category'];
+        }
+
+        $query = "SELECT * FROM post WHERE post_category_id = {$cat_id} ";
+        $category_query = mysqli_query($con,$query);
+
+            while($row = mysqli_fetch_array($category_query)){
+              $post_id = $row['post_id'];
+              $post_title = $row['post_title'];
+              $post_author = $row['post_author'];
+              $post_date = $row['post_date'];
+              $post_image = $row['post_image'];
+              $post_content = $row['post_content'];
+
+                echo "
+                      <h1 class='page-header'>
+                       Page Heading
+                       <small>Secondary Text</small>
+                   </h1>
+
+                   <!-- Second Blog Post -->
+                   <h2>
+                       <a href='#'>$post_title</a>
+                   </h2>
+                   <p class='lead'>
+                       by <a href=''>$post_author</a>
+                   </p>
+                   <p><span class='glyphicon glyphicon-time'></span> $post_date </p>
+                   <hr>
+                   <img class='img-responsive' src='images/ $post_image ' alt=''>
+                   <hr>
+                   <p>$post_content</p>
+                   <a class='btn btn-primary' href='#'>Read More <span class='glyphicon glyphicon-chevron-right'></span></a>
+
+                   <hr>
+                ";
+            }
       }
 
 
@@ -165,7 +209,7 @@ function blog_categories_well(){
                 $category_id = $row['category_id'];
 
                     echo "
-                              <option>$category_title</option>
+                              <option value='$category_id'>$category_title</option>
                     ";
           }
     }
@@ -255,7 +299,7 @@ function blog_categories_well(){
   function show_posts(){
     global $con;
 
-    $query = "SELECT * FROM post ";
+    $query = "SELECT * FROM post";
     $show_posts_query = mysqli_query($con,$query);
     confirm($show_posts_query);
 
@@ -275,7 +319,15 @@ function blog_categories_well(){
             echo "<td>{$post_id1}</td>";
             echo "<td>{$post_author1}</td>";
             echo "<td>{$post_title1}</td>";
-            echo "<td>0000{$post_category_id1}</td>";
+
+            $category_query = "SELECT * FROM category WHERE category_id = {$post_category_id1} ";
+            $select_query = mysqli_query($con,$category_query);
+              while($row = mysqli_fetch_assoc($select_query)){
+                      $category_title = $row['category_title'];
+                      $category_id = $row['category_id'];
+                      echo "<td>{$category_title}</td>";
+              }
+
 
 
 
@@ -290,6 +342,51 @@ function blog_categories_well(){
         echo "</tr>";
     }
   }
+
+  function show_post_link(){
+    global $con;
+
+    if(isset($_GET['post_id'])){
+
+          $post_id = $_GET['post_id'];
+
+    }
+
+      $query = "SELECT * FROM post WHERE post_id = $post_id ";
+      $select_query = mysqli_query($con,$query);
+        while($row = mysqli_fetch_array($select_query)){
+                $post_id = $row['post_id'];
+                $post_title = $row['post_title'];
+                $post_author = $row['post_author'];
+                $post_date = $row['post_date'];
+                $post_image = $row['post_image'];
+                $post_content = $row['post_content'];
+
+                  echo "
+                        <h1 class='page-header'>
+                         Page Heading
+                         <small>Secondary Text</small>
+                     </h1>
+
+                     <!-- Second Blog Post -->
+                     <h2>
+                         <a href='#'>$post_title</a>
+                     </h2>
+                     <p class='lead'>
+                         by <a href=''>$post_author</a>
+                     </p>
+                     <p><span class='glyphicon glyphicon-time'></span> $post_date </p>
+                     <hr>
+                     <img class='img-responsive' src='images/ $post_image ' alt=''>
+                     <hr>
+                     <p>$post_content</p>
+                     <a class='btn btn-primary' href='#'>Read More <span class='glyphicon glyphicon-chevron-right'></span></a>
+
+                     <hr>
+                  ";
+        }
+  }
+
 
 
   function add_post(){

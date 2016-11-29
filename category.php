@@ -27,9 +27,9 @@
                 </h1>
 
                 <!-- First Blog Post -->
-                <?php display_post();  ?>
+                <?php display_category_post(); ?>
 
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+
 
                 <hr>
 
@@ -74,6 +74,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <?php blog_categories_well(); ?>
+
 
 
                         </div>
