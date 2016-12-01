@@ -514,4 +514,54 @@ function blog_categories_well(){
         echo "";
       }
   }
+
+  function show_comments(){
+    global $con;
+
+    $query = "SELECT * FROM comments ";
+    $show_comment_query = mysqli_query($con,$query);
+    confirm($show_comment_query);
+
+    while($row = mysqli_fetch_assoc($show_comment_query)){
+
+          $comment_id = $row['comment_id'];
+          $comment_post_id = $row['comment_post_id'];
+          $comment_author = $row['comment_author'];
+          $comment_email = $row['comment_email'];
+          $comment_status = $row['comment_status'];
+          $comment_content = $row['comment_content'];
+          $comment_date = $row['comment_date'];
+
+          echo "<tr>
+            <td>$comment_id</td>
+            <td>$comment_post_id</td>
+            <td>$comment_author</td>
+            <td>$comment_email</td>
+            <td>$comment_status</td>
+            <td>$comment_content</td>
+            <td>$comment_date</td>
+            <td><a href='comments.php?delete={$comment_id}'>Approve</a></td>
+            <td><a href='comments.php?delete={$comment_id}'>Unapprove</a></td>
+            <td><a href='comments.php?delete={$comment_id}'>Delete</a></td>
+          </tr>";
+    }
+  }
+
+  function add_comment(){
+    global $con;
+
+    if(isset($_POST['add_comment'])){
+
+        $the_post_id = $_GET['post_id'];
+        $comment_author = $_POST['comment_author'];
+        $comment_email = $_POST['comment_email'];
+        $comment_content = $_POST['comment_content'];
+
+        $query = "INSERT INTO comments(comment_post_id,comment_author,comment_email,comment_content,comment_date,comment_status) ";
+        $query .= "VALUES( {$the_post_id},'{$comment_author}','{$comment_email}','{$comment_content}',now() , 'unapproved' ) ";
+        $add_comment_query = mysqli_query($con,$query);
+        confirm($add_comment_query);
+    }
+  }
+
 ?>
