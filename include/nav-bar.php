@@ -17,6 +17,8 @@
             <ul class="nav navbar-nav">
 
               <?php display_cat_table(); ?>
+              <?php delete_comment(); ?>
+
 
                 <li>
                   <a href="admin">Admin</a>

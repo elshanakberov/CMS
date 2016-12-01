@@ -515,6 +515,8 @@ function blog_categories_well(){
       }
   }
 
+  /********************** ADMIN COMMENTS ********************/
+
   function show_comments(){
     global $con;
 
@@ -532,18 +534,26 @@ function blog_categories_well(){
           $comment_content = $row['comment_content'];
           $comment_date = $row['comment_date'];
 
-          echo "<tr>
-            <td>$comment_id</td>
-            <td>$comment_post_id</td>
-            <td>$comment_author</td>
-            <td>$comment_email</td>
-            <td>$comment_status</td>
-            <td>$comment_content</td>
-            <td>$comment_date</td>
-            <td><a href='comments.php?delete={$comment_id}'>Approve</a></td>
-            <td><a href='comments.php?delete={$comment_id}'>Unapprove</a></td>
-            <td><a href='comments.php?delete={$comment_id}'>Delete</a></td>
-          </tr>";
+          echo "<tr>";
+          echo  "<td>$comment_id</td>";
+          echo  "<td>$comment_post_id</td>";
+          echo  "<td>$comment_author</td>";
+          echo  "<td>$comment_email</td>";
+            $query = "SELECT * FROM post WHERE post_id =  $comment_post_id ";
+            $sql_query = mysqli_query($con,$query);
+              while($row = mysqli_fetch_assoc($sql_query)){
+                    $post_id = $row['post_id'];
+                    $post_title = $row['post_title'];
+
+                      echo "<td><a href='../post.php?post_id=$post_id'>$post_title</a></td>";
+              }
+          echo  "<td>$comment_status</td>";
+          echo  "<td>$comment_content</td>";
+          echo  "<td>$comment_date</td>";
+          echo  "<td><a href='comments.php?approve={$comment_id}'>Approve</a></td>";
+          echo  "<td><a href='comments.php?unapprove={$comment_id}'>Unapprove</a></td>";
+          echo  "<td><a href='comments.php?delete={$comment_id}'>Delete</a></td>";
+          echo  "</tr>";
     }
   }
 
@@ -553,9 +563,9 @@ function blog_categories_well(){
     if(isset($_POST['add_comment'])){
 
         $the_post_id = $_GET['post_id'];
-        $comment_author = $_POST['comment_author'];
-        $comment_email = $_POST['comment_email'];
-        $comment_content = $_POST['comment_content'];
+        $comment_author = clean($_POST['comment_author']);
+        $comment_email = clean($_POST['comment_email']);
+        $comment_content = clean($_POST['comment_content']);
 
         $query = "INSERT INTO comments(comment_post_id,comment_author,comment_email,comment_content,comment_date,comment_status) ";
         $query .= "VALUES( {$the_post_id},'{$comment_author}','{$comment_email}','{$comment_content}',now() , 'unapproved' ) ";
@@ -564,4 +574,85 @@ function blog_categories_well(){
     }
   }
 
+  function delete_comment(){
+        global $con;
+
+        if(isset($_GET['delete'])){
+          $delete_post_id = $_GET['delete'];
+
+          $query = "DELETE FROM comments WHERE comment_id = $delete_post_id ";
+          $delete_comment_query = mysqli_query($con,$query);
+          confirm($delete_comment_query);
+          redirect("comments.php");
+        }else{
+          echo "error";
+        }
+
+  }
+
+  function approve_post(){
+    global $con;
+
+    if(isset($_GET['approve'])){
+
+
+        $query = "UPDATE comments SET comment_status = 'approved' ";
+        $update_query = mysqli_query($con,$query);
+        confirm($update_query);
+        redirect("comments.php");
+    }
+  }
+  function unapprove_post(){
+    global $con;
+
+    if(isset($_GET['unapprove'])){
+
+
+        $query = "UPDATE comments SET comment_status = 'unapproved' ";
+        $update_query = mysqli_query($con,$query);
+        confirm($update_query);
+        redirect("comments.php");
+    }
+  }
+
+  function show_comment_based_on_approval(){
+      global $con,$comment_author,$comment_content,$comment_date;
+            if(isset($_GET['post_id'])){
+                  $the_post_id = $_GET['post_id'];
+            }
+      $query = "SELECT * FROM comments WHERE comment_post_id = {$the_post_id} AND comment_status = 'approved' ORDER BY comment_id DESC";
+      $comment_query  = mysqli_query($con,$query);
+        while($row = mysqli_fetch_assoc($comment_query)){
+              $comment_id = $row['comment_id'];
+              $comment_author = $row['comment_author'];
+              $comment_content = $row['comment_content'];
+              $comment_date = $row['comment_date'];
+
+
+        ?>
+        <a class="pull-left" href="#">
+            <img class="media-object" src="http://placehold.it/64x64" alt="">
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading"><?php echo $comment_author ?>
+                <small><?php echo $comment_date ?></small>
+            </h4>
+            <?php echo $comment_content ?>
+            <!-- Nested Comment -->
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">Nested Start Bootstrap
+                        <small>August 25, 2014 at 9:30 PM</small>
+                    </h4>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                </div>
+            </div>
+            <!-- End Nested Comment -->
+        </div>
+        <?php
+   }
+  }
 ?>
