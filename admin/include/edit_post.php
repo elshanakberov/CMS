@@ -6,9 +6,7 @@
               </div>
               <div class="form-group">
                     <select class="" name="post_category_id">
-                            <?php admin_category2();
-
-                            ?>
+                            <?php admin_category2(); ?>
 
                     </select>
               </div>

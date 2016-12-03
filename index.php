@@ -28,6 +28,9 @@
 
                 <!-- First Blog Post -->
                 <?php display_post();  ?>
+                                              <?php post_view();  ?>
+
+
 
                 <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 

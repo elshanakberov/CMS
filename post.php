@@ -14,6 +14,7 @@
 
                 <!-- Blog Post -->
                               <?php show_post_link(); ?>
+                              <?php post_view();  ?>
                 <!-- Title -->
 
                 <!-- Blog Comments -->

@@ -35,7 +35,7 @@ function display_cat_table() {
 function display_post(){
   global $con;
 
-  $query= "SELECT * FROM post";
+  $query= "SELECT * FROM post ORDER BY post_view DESC";
   $result = mysqli_query($con,$query);
   confirm($result);
 
@@ -46,6 +46,7 @@ function display_post(){
       $post_date = $row['post_date'];
       $post_image = $row['post_image'];
       $post_content = $row['post_content'];
+      $post_view = $row['post_view'];
 
 
 ?>
@@ -56,6 +57,7 @@ function display_post(){
             by <a href="index.php"><?php echo $post_author ?></a>
         </p>
         <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?></p>
+        <p><span class="glyphicon glyphicon-eye-open"></span> Post View <?php  echo $post_view ?> </p>
         <hr>
         <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
         <hr>
@@ -313,6 +315,7 @@ function blog_categories_well(){
           $post_status1 = $row['post_status'];
           $post_tags1 = $row['post_tags'];
           $post_comments1 = $row['post_comment_count'];
+          $post_view1 = $row['post_view'];
           $post_date1 = $row['post_date'];
 
             echo "<tr>";
@@ -336,12 +339,25 @@ function blog_categories_well(){
             echo "<td><img class='img-responsive' width='120px' src='../images/{$post_image1}' ></td>";
             echo "<td>{$post_tags1}</td>";
             echo "<td>{$post_comments1}</td>";
+            echo "<td>{$post_view1}</td>";
             echo "<td>{$post_date1}</td>";
             echo "<td><a href='posts.php?source=edit_post&p_id={$post_id1}'>Edit</a></td>";
             echo "<td><a href='posts.php?delete={$post_id1}'>Delete</a></td>";
         echo "</tr>";
     }
   }
+
+  function post_view(){
+  global $con;
+      if(isset($_GET['post_id'])){
+        $the_post_id = $_GET['post_id'];
+
+              $view_query = "UPDATE post SET post_view = post_view +1 WHERE post_id = $the_post_id ";
+              $view_post_query = mysqli_query($con,$view_query);
+        }else{
+          echo "Post view error";
+        }
+      }
 
   function show_post_link(){
     global $con;
@@ -354,6 +370,8 @@ function blog_categories_well(){
 
       $query = "SELECT * FROM post WHERE post_id = $post_id ";
       $select_query = mysqli_query($con,$query);
+
+
         while($row = mysqli_fetch_array($select_query)){
                 $post_id = $row['post_id'];
                 $post_title = $row['post_title'];
@@ -392,6 +410,7 @@ function blog_categories_well(){
   function add_post(){
     global $con;
 
+
       if(isset($_POST['submit'])){
 
               $post_title1 = clean($_POST['post_title']);
@@ -403,7 +422,6 @@ function blog_categories_well(){
               $post_tags1 = $_POST['post_tags'];
               $post_content1= $_POST['post_content'];
               $post_date1 = date('d-m-y');
-              $post_comment_count = 4;
               $extension = substr($image_name1,strpos($image_name1, '.') + 1);
 
               if(isset($image_name1)){
@@ -419,9 +437,11 @@ function blog_categories_well(){
               }elseif($post_author1 == "" || empty($post_author1)){
                   echo "<h3>I was wrong</h3>";
               }else{
-                $query = "INSERT INTO post(post_category_id,post_title,post_author,post_date,post_image,post_content,post_tags,post_comment_count,post_status) ";
-                $query .= "VALUES('{$post_category_id1}','{$post_title1}','{$post_author1}',now(),'{$image_name1}','{$post_content1}','{$post_tags1}','{$post_comment_count}','{$post_status1}' )";
+                $query = "INSERT INTO post(post_category_id,post_title,post_author,post_date,post_image,post_content,post_tags,post_status) ";
+                $query .= "VALUES('{$post_category_id1}','{$post_title1}','{$post_author1}',now(),'{$image_name1}','{$post_content1}','{$post_tags1}','{$post_status1}' )";
                 $insert_query = mysqli_query($con,$query);
+
+
               }
       }
 }
@@ -571,6 +591,9 @@ function blog_categories_well(){
         $query .= "VALUES( {$the_post_id},'{$comment_author}','{$comment_email}','{$comment_content}',now() , 'unapproved' ) ";
         $add_comment_query = mysqli_query($con,$query);
         confirm($add_comment_query);
+
+        $view_query = "UPDATE post SET post_comment_count = post_comment_count + 1 WHERE post_id = $the_post_id ";
+        $view_comment_count_query = mysqli_query($con,$view_query);
     }
   }
 
@@ -578,14 +601,13 @@ function blog_categories_well(){
         global $con;
 
         if(isset($_GET['delete'])){
+
           $delete_post_id = $_GET['delete'];
 
           $query = "DELETE FROM comments WHERE comment_id = $delete_post_id ";
           $delete_comment_query = mysqli_query($con,$query);
           confirm($delete_comment_query);
           redirect("comments.php");
-        }else{
-          echo "error";
         }
 
   }
@@ -655,4 +677,6 @@ function blog_categories_well(){
         <?php
    }
   }
+
+
 ?>
