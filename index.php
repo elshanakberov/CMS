@@ -28,7 +28,7 @@
 
                 <!-- First Blog Post -->
                 <?php display_post();  ?>
-                                              <?php post_view();  ?>
+
 
 
 
@@ -66,9 +66,25 @@
                           </button>
                           </span>
                       </div>
-                    </form>
+                    </form><br>
+
 
                     <!-- /.input-group -->
+                </div>
+
+                <div class="well">
+                  <h4>Login</h4>
+                  <form action="include/login.php" method="post">
+                    <div class="form-group">
+                        <input name="user_name" type="text" class="form-control" placeholder="Enter Username">
+                    </div>
+                    <div class="form-group">
+                        <input name="user_password" type="password" class="form-control" placeholder="Enter Password">
+                    </div>
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary" name="login" type="submit">Login</button>
+                    </span>
+                  </form>
                 </div>
 
                 <!-- Blog Categories Well -->
@@ -76,6 +92,7 @@
                     <h4>Blog Categories</h4>
                     <div class="row">
                         <div class="col-lg-6">
+
                             <?php blog_categories_well(); ?>
 
 

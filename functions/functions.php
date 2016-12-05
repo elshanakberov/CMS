@@ -1,4 +1,6 @@
 <!-- HELPER FUNCTIONS -->
+<?php session_start(); ?>
+
 <?php
 
 function clean($string){
@@ -809,5 +811,39 @@ function display_users(){
         $update_user_date = mysqli_query($con,$query);
     }
   }
+/********************** Login ********************/
+
+function login(){
+  global $con;
+
+  if(isset($_POST['login'])){
+
+    $user_name = $_POST['user_name'];
+    $user_password = $_POST['user_password'];
+
+    $username = mysqli_real_escape_string($con,$user_name);
+    $password = mysqli_real_escape_string($con,$user_password);
+
+
+        $query = "SELECT * FROM users WHERE user_name = '{$username}'";
+        $select_user = mysqli_query($con,$query);
+
+        while($row = mysqli_fetch_array($select_user)){
+              $db_username = $row['user_name'];
+              $db_password = $row['user_password'];
+              $db_user_firstname = $row['user_firstname'];
+              $db_user_lastname = $row['user_lastname'];
+              $db_user_role = $row['user_role'];
+        }
+        if($username === $db_username && $password === $db_password ){
+          $_SESSION['username'] = $db_username;
+          $_SESSION['user_role'] = $db_user_role;
+          redirect("../admin");
+        }else{
+          redirect("../index.php");
+        }
+  }
+}
+
 
 ?>

@@ -1,3 +1,6 @@
+<?php
+limit_user_login();
+ ?>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -22,7 +25,7 @@
                             </span>
                             <div class="media-body">
                                 <h5 class="media-heading">
-                                    <strong>John Smith</strong>
+                                    <strong></strong>
                                 </h5>
                                 <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                                 <p>Lorem ipsum dolor sit amet, consectetur...</p>
@@ -146,7 +149,7 @@
                         <a href="users.php?source=view_all_users">Users</a>
                     </li>
                     <li>
-                        <a href="users.php?source=add_user">Add User</a>
+                        <a href="users.php?source=add_use">Add User</a>
                     </li>
                 </ul>
             </li>
