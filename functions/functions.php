@@ -616,9 +616,9 @@ function blog_categories_well(){
     global $con;
 
     if(isset($_GET['approve'])){
+        $approve_comment_id = $_GET['approve'];
 
-
-        $query = "UPDATE comments SET comment_status = 'approved' ";
+        $query = "UPDATE comments SET comment_status = 'approved' WHERE comment_id = $approve_comment_id ";
         $update_query = mysqli_query($con,$query);
         confirm($update_query);
         redirect("comments.php");
@@ -628,9 +628,9 @@ function blog_categories_well(){
     global $con;
 
     if(isset($_GET['unapprove'])){
+        $unapprove_comment_id = $_GET['unapprove'];
 
-
-        $query = "UPDATE comments SET comment_status = 'unapproved' ";
+        $query = "UPDATE comments SET comment_status = 'unapproved' WHERE comment_id = $unapprove_comment_id";
         $update_query = mysqli_query($con,$query);
         confirm($update_query);
         redirect("comments.php");
@@ -678,5 +678,136 @@ function blog_categories_well(){
    }
   }
 
+
+
+
+/********************** ADMIN POSTS ********************/
+
+
+function display_users(){
+   global $con;
+
+   $query = "SELECT * FROM users ";
+   $display_users_query = mysqli_query($con,$query);
+
+     confirm($display_users_query);
+       while($row = mysqli_fetch_array($display_users_query)){
+             $user_id = $row['user_id'];
+             $user_name = $row['user_name'];
+             $user_firstname = $row['user_firstname'];
+             $user_lastname = $row['user_lastname'];
+             $user_email = $row['user_email'];
+             $user_role = $row['user_role'];
+
+             echo " <tr> ";
+             echo "<td>{$user_id}</td>";
+             echo "<td>{$user_name}</td>";
+             echo "<td>{$user_firstname}</td>";
+             echo "<td>{$user_lastname}</td>";
+             echo "<td>{$user_email}</td>";
+             echo "<td>{$user_role}</td>";
+             echo "<td><a href='users.php?admin={$user_id}'>Admin</a></td>";
+             echo "<td><a href='users.php?user={$user_id}'>User</a></td>";
+             echo "<td><a href='users.php?source=edit_user&edit_user_id={$user_id}'>Edit</a></td>";
+             echo "<td><a href='users.php?delete={$user_id}'>Delete</a></td>";
+             echo "</tr>";
+       }
+}
+
+
+  function add_user(){
+        global $con;
+
+        if(isset($_POST['submit'])){
+          $user_name       = clean($_POST['user_name']);
+          $user_role       = clean($_POST['user_role']);
+          $user_firstname  = clean($_POST['user_firstname']);
+          $user_lastname   = clean($_POST['user_lastname']);
+          $user_email      = clean($_POST['user_email']);
+          $user_password   = clean($_POST['user_password']);
+
+            $query = "INSERT INTO users (user_name,user_role,user_firstname,user_lastname,user_email,user_password) ";
+            $query .= "VALUES('{$user_name}' , '{$user_role}' , '{$user_firstname}' , '{$user_lastname}' , '{$user_email}' , '{$user_password}') ";
+            $add_user_query = mysqli_query($con,$query);
+              if($add_user_query){
+                redirect("users.php?source=view_all_users");
+              }else{
+                  echo "<h2>The Have Been Issue</h2>";
+              }
+        }
+
+  }
+
+    function delete_user(){
+      global $con;
+
+      if(isset($_GET['delete'])){
+        $delete_post_id = $_GET['delete'];
+
+          $query = "DELETE FROM users WHERE user_id = $delete_post_id ";
+          $delete_user_query = mysqli_query($con,$query);
+          redirect("users.php");
+      }
+    }
+
+    function update_user_role(){
+      global $con;
+      if(isset($_GET['admin'])){
+        $user_role_admin_id = $_GET['admin'];
+        $query = "UPDATE users SET user_role = 'Admin' WHERE user_id = $user_role_admin_id ";
+
+        $update_user_role_admin = mysqli_query($con,$query);
+        redirect("users.php");
+      }
+
+      if(isset($_GET['user'])){
+        $user_role_user_id = $_GET['user'];
+
+        $query = "UPDATE users SET user_role = 'User' WHERE user_id = $user_role_user_id";
+        $update_user_role_user = mysqli_query($con,$query);
+        redirect("users.php");
+      }
+    }
+
+    function fetch_user_data_and_update_data(){
+      global $con,$user_name,$user_role,$user_firstname,$user_lastname,$user_email,$user_password;
+        if(isset($_GET['edit_user_id'])){
+            $edit_user_id = $_GET['edit_user_id'];
+        }
+        $query = "SELECT * FROM users WHERE user_id = $edit_user_id ";
+        $select_user_id = mysqli_query($con,$query);
+
+        while($row = mysqli_fetch_array($select_user_id)){
+              $user_name = $row['user_name'];
+              $user_role = $row['user_role'];
+              $user_firstname = $row['user_firstname'];
+              $user_lastname = $row['user_lastname'];
+              $user_email = $row['user_email'];
+              $user_password = $row['user_password'];
+        }
+
+// Updating those data
+
+    if(isset($_POST['submit'])){
+
+      $user_name = clean($_POST['user_name']);
+      $user_role = clean($_POST['user_role']);
+      $user_firstname = clean($_POST['user_firstname']);
+      $user_lastname= clean($_POST['user_lastname']);
+      $user_email = clean($_POST['user_email']);
+      $user_password = clean($_POST['user_password']);
+
+        $query = "UPDATE users SET ";
+        $query .= "user_name = '{$user_name}', ";
+        $query .= "user_role = '{$user_role}', ";
+        $query .= "user_firstname = '{$user_lastname}', ";
+        $query .= "user_lastname = '{$user_lastname}', ";
+        $query .= "user_email = '{$user_email}', ";
+        $query .= "user_password = '{$user_password}' ";
+        $query .= "WHERE user_id = {$edit_user_id} ";
+
+        $update_user_date = mysqli_query($con,$query);
+    }
+  }
 
 ?>
