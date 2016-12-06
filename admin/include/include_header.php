@@ -1,7 +1,21 @@
+<?php
+if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === "Admin"){
+  echo "<meta  content='0';URL=../admin'>";
+}else{
+    redirect("../index.php");
+}
+?>
+
 <?php ob_start(); ?>
-<?php session_start(); ?>
-<?php include "../functions/db.php"; ?>
-<?php include "../functions/functions.php"; ?>
+
+<?php require_once ("../functions/db.php"); ?>
+<?php require_once ("../functions/functions.php"); ?>
+
+  <?php
+    if(isset($_SESSION['user_role']) && ($_SESSION['user_role'] === 'Admin')===FALSE) {
+      redirect("../index.php");
+    }
+ ?>
 
 
 <!DOCTYPE html>

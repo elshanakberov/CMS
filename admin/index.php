@@ -1,6 +1,8 @@
 <?php
     include "include/include_header.php";
+
  ?>
+
 <body>
 
     <div id="wrapper">
@@ -18,7 +20,7 @@
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             Welcome
-                            <small><?php echo $_SESSION['username']; ?></small>
+                            <small><?php echo $_SESSION['user_name']; ?></small>
                         </h1>
                         <ol class="breadcrumb">
                             <li>
