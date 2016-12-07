@@ -811,25 +811,27 @@ function display_users(){
         $update_user_date = mysqli_query($con,$query);
     }
   }
-/********************** Login ********************/
+/********************** Login and Registration ********************/
 
 function login(){
   global $con;
   if(isset($_POST['login'])){
+
     $user_name = $_POST['user_name'];
     $user_password = $_POST['user_password'];
     $username = mysqli_real_escape_string($con,$user_name);
-    $password = mysqli_real_escape_string($con,$user_password);
+    $user_password = mysqli_real_escape_string($con,$user_password);
 
-    $query = "SELECT * FROM users WHERE user_name = '{$username}' ";
+    $query = "SELECT * FROM users WHERE user_name = '{$username}'  ";
     $select_query = mysqli_query($con,$query);
 
-      while($row = mysqli_fetch_array($select_query )){
+      while($row = mysqli_fetch_array($select_query)){
         $db_username = $row['user_name'];
         $db_user_role = $row['user_role'];
         $db_password = $row['user_password'];
       }
-      if($username === $db_username && $password === $db_password){
+          $user_password = crypt($user_password,$db_password);
+      if($username === $db_username && $user_password === $db_password){
         $_SESSION['user_name'] = $db_username;
         $_SESSION['user_role'] = $db_user_role;
           redirect("../admin");
@@ -840,6 +842,61 @@ function login(){
   }
 }
 
+function user_restriction(){
+  if(!isset($_SESSION['user_role'])){
+    redirect("../index.php");
+  }elseif(isset($_SESSION['user_role']) && ($_SESSION['user_role'] === 'Admin')===FALSE) {
+      redirect("../index.php");
+    }
+}
 
 
+function profile(){
+  global $con,$user_name,$user_role,$user_firstname,$user_lastname,$user_email,$user_password;
+  if(isset($_SESSION['user_name'])){
+    $session_user_name  = $_SESSION['user_name'];
+    $query = "SELECT * FROM users WHERE user_name = '{$session_user_name}' ";
+    $select_query = mysqli_query($con,$query);
+      while($row = mysqli_fetch_array($select_query)){
+            $user_name = $row['user_name'];
+            $user_role = $row['user_role'];
+            $user_firstname = $row['user_firstname'];
+            $user_lastname = $row['user_lastname'];
+            $user_email = $row['user_email'];
+            $user_password = $row['user_password'];
+
+      }
+  }
+}
+  function register_user(){
+    global $con,$message;
+
+      if(isset($_POST['submit'])){
+        $username = clean($_POST['username']);
+        $user_email = clean($_POST['email']);
+        $user_password = clean($_POST['password']);
+
+        $username = mysqli_real_escape_string($con,$username);
+        $user_email = mysqli_real_escape_string($con,$user_email);
+        $user_password = mysqli_real_escape_string($con,$user_password);
+            if(!empty($username) || !empty($user_email ) || !empty($user_password)){
+              $rand_query = "SELECT randSalt FROM users ";
+              $fetch_query = mysqli_query($con,$rand_query);
+
+                $row = mysqli_fetch_array($fetch_query);
+                $salt = $row['randSalt'];
+                $user_password = crypt($user_password,$salt);
+
+                $query = "INSERT INTO users(user_name,user_email,user_password,user_role) ";
+                $query .= "VALUES ('{$username}' , '{$user_email}','{$user_password}','User') ";
+                $register_user_query = mysqli_query($con,$query);
+
+                $message = "User Succesfully Registered";
+            }else{
+                $message = "Fail";
+            }
+      }else{
+        $message = "";
+      }
+  }
 ?>

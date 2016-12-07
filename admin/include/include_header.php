@@ -1,10 +1,4 @@
-<?php
-if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === "Admin"){
-  echo "<meta  content='0';URL=../admin'>";
-}else{
-    redirect("../index.php");
-}
-?>
+
 
 <?php ob_start(); ?>
 
@@ -12,9 +6,7 @@ if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === "Admin"){
 <?php require_once ("../functions/functions.php"); ?>
 
   <?php
-    if(isset($_SESSION['user_role']) && ($_SESSION['user_role'] === 'Admin')===FALSE) {
-      redirect("../index.php");
-    }
+    user_restriction();
  ?>
 
 

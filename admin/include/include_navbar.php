@@ -109,7 +109,7 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a href="../include/logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                 </li>
             </ul>
         </li>
@@ -147,13 +147,15 @@
                         <a href="users.php?source=view_all_users">Users</a>
                     </li>
                     <li>
-                        <a href="users.php?source=add_use">Add User</a>
+                        <a href="users.php?source=add_user">Add User</a>
                     </li>
                 </ul>
             </li>
+
             <li class="">
-                <a href="blank-page.html"><i class="fa fa-fw fa-user"></i>Profile</a>
+                <a href="profile.php"><i class="fa fa-fw fa-user"></i>Profile</a>
             </li>
+
         </ul>
     </div>
     <!-- /.navbar-collapse -->
