@@ -799,13 +799,19 @@ function display_users(){
       $user_email = clean($_POST['user_email']);
       $user_password = clean($_POST['user_password']);
 
+            $randsalt_query = "SELECT randSalt FROM users ";
+            $select_query = mysqli_query($con,$randsalt_query);
+            $row = mysqli_fetch_array($select_query);
+            $hashed_password = $row['randSalt'];
+            $hashed_password = crypt($user_password,$hashed_password);
+
         $query = "UPDATE users SET ";
         $query .= "user_name = '{$user_name}', ";
         $query .= "user_role = '{$user_role}', ";
         $query .= "user_firstname = '{$user_lastname}', ";
         $query .= "user_lastname = '{$user_lastname}', ";
         $query .= "user_email = '{$user_email}', ";
-        $query .= "user_password = '{$user_password}' ";
+        $query .= "user_password = '{$hashed_password}' ";
         $query .= "WHERE user_id = {$edit_user_id} ";
 
         $update_user_date = mysqli_query($con,$query);
