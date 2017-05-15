@@ -333,10 +333,6 @@ function blog_categories_well(){
                       echo "<td>{$category_title}</td>";
               }
 
-
-
-
-
             echo "<td>{$post_status1}</td>";
             echo "<td><img class='img-responsive' width='120px' src='../images/{$post_image1}' ></td>";
             echo "<td>{$post_tags1}</td>";

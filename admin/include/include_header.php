@@ -5,9 +5,9 @@
 <?php require_once ("../functions/db.php"); ?>
 <?php require_once ("../functions/functions.php"); ?>
 
-  <?php
+  <!-- <?php
     user_restriction();
- ?>
+ ?> -->
 
 
 <!DOCTYPE html>

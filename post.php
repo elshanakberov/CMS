@@ -50,7 +50,6 @@
 
                 <div class="media">
                   <?php show_comment_based_on_approval(); ?>
-
                 </div>
 
             </div>

@@ -1,6 +1,6 @@
 <?php
     include "include/include_header.php";
-
+    user_restriction();
  ?>
 
 <body>
