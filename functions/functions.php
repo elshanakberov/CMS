@@ -437,7 +437,13 @@ function blog_categories_well(){
               }else{
                 $query = "INSERT INTO post(post_category_id,post_title,post_author,post_date,post_image,post_content,post_tags,post_status) ";
                 $query .= "VALUES('{$post_category_id1}','{$post_title1}','{$post_author1}',now(),'{$image_name1}','{$post_content1}','{$post_tags1}','{$post_status1}' )";
+
                 $insert_query = mysqli_query($con,$query);
+                if ($insert_query) {
+                    echo "True";
+                }else{
+                  echo "False";
+                }
 
 
               }
@@ -590,7 +596,7 @@ function blog_categories_well(){
         $add_comment_query = mysqli_query($con,$query);
         confirm($add_comment_query);
 
-        $view_query = "UPDATE post SET post_comment_count = post_comment_count + 1 WHERE post_id = $the_post_id ";
+        $view_query = "  post SET post_comment_count = post_comment_count + 1 WHERE post_id = $the_post_id ";
         $view_comment_count_query = mysqli_query($con,$view_query);
     }
   }

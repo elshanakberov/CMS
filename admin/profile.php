@@ -47,15 +47,6 @@ profile();
                                         </select>
                                   </div>
 
-                                  <div class="form-group">
-                                      <label for="title">Firstname</label>
-                                      <input value="<?php echo $user_firstname ?>" type="text" class="form-control" name="user_firstname" required>
-                                  </div>
-
-                                  <div class="form-group">
-                                      <label for="title">Lastname</label>
-                                      <input value="<?php echo $user_lastname ?>" type="text" class="form-control" name="user_lastname" required>
-                                  </div>
 
                                   <div class="form-group">
                                       <label for="title">Email</label>
@@ -67,9 +58,6 @@ profile();
                                       <input value="<?php echo $user_password ?>" type="password"  name="user_password" class="form-control" required>
                                   </div>
 
-                                  <div class="form-group">
-                                      <input type="submit" class="btn-btn-primary" name="submit" value="Submit">
-                                  </div>
 
               </form>
 
